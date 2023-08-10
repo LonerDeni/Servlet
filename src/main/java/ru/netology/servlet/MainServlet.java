@@ -8,8 +8,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import static ru.netology.Methods.*;
+
 public class MainServlet extends HttpServlet {
   private PostController controller;
+  private final String URL = "/api/posts";
 
   @Override
   public void init() {
@@ -25,21 +28,21 @@ public class MainServlet extends HttpServlet {
       final var path = req.getRequestURI();
       final var method = req.getMethod();
       // primitive routing
-      if (method.equals("GET") && path.equals("/api/posts")) {
+      if (method.equals(GET.getNameMethods()) && path.equals(URL)) {
         controller.all(resp);
         return;
       }
-      if (method.equals("GET") && path.matches("/api/posts/\\d+")) {
+      if (method.equals(GET.getNameMethods()) && path.matches(URL + "/\\d+")) {
         // easy way
-        final var id = Long.parseLong(path.substring(path.lastIndexOf("/")+ 1));
+        final var id = Long.parseLong(path.substring(path.lastIndexOf("/") + 1));
         controller.getById(id, resp);
         return;
       }
-      if (method.equals("POST") && path.equals("/api/posts")) {
+      if (method.equals(POST.getNameMethods()) && path.equals(URL)) {
         controller.save(req.getReader(), resp);
         return;
       }
-      if (method.equals("DELETE") && path.matches("/api/posts/\\d+")) {
+      if (method.equals(DELETE.getNameMethods()) && path.matches(URL + "/\\d+")) {
         // easy way
         final var id = Long.parseLong(path.substring(path.lastIndexOf("/") + 1));
         controller.removeById(id, resp);
@@ -52,4 +55,3 @@ public class MainServlet extends HttpServlet {
     }
   }
 }
-
